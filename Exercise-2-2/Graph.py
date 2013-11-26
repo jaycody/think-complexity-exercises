@@ -113,6 +113,34 @@ class Graph(dict):
         
         return list(es)
 
+    def out_vertices(self, v):
+        """Takes a vertex and returns a list of the adjacent vertices
+        """
+        connected_to = self[v]
+        return list(connected_to.keys())
+
+    def out_edges(self, v):
+        """Takes a vertex and returns a list of the edges connected to it
+        """
+        es = set()
+        connected_to = self[v]
+        for w in connected_to:
+            e = self.get_edge(v, w)
+            if e not in es:
+                es.add(e)
+
+        return list(es)
+
+    def add_all_edges(self):
+        """Takes all vertices and adds edges between all pairs of them
+        """
+        from itertools import combinations
+ 
+        vs = self.vertices()
+        pairs = [list(x) for x in combinations(vs, 2)]
+        for p in pairs:
+            e = Edge(p[0], p[1])
+            self.add_edge(e)
 
 
 
@@ -133,6 +161,22 @@ def main(script, *args):
     print "Edges: %s" % g.edges()
     print g.get_edge(v, w)
     print g.vertices()
+
+    g.add_edge(e)
+    z = Vertex('z')
+    g.add_vertex(z)
+    print g
+    e2 = Edge(v, z)
+    g.add_edge(e2)
+    print e2
+    print g
+    print "Nodes connected to v: %s" % g.out_vertices(v)
+    print "Edges connected to v: %s" % g.out_edges(v)
+    g.remove_edge(e)
+    g.remove_edge(e2)
+    print g
+    g.add_all_edges()
+    print g
 
 if __name__ == '__main__':
     import sys
